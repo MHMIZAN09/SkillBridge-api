@@ -1,0 +1,51 @@
+model TutorProfile {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline      String
+  bio           String   @db.Text
+  hourlyRate    Decimal  @db.Decimal(10, 2)
+  experience    Int
+  education     String?
+  languages     String[]
+  isApproved    Boolean  @default(false)
+  isAvailable   Boolean  @default(true)
+  avgRating     Float    @default(0)
+  totalReviews  Int      @default(0)
+  totalSessions Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  categories     TutorCategory[]
+  availabilities AvailabilitySlot[]
+  bookings       Booking[]
+  reviews        Review[]
+
+  @@map("tutor_profiles")
+}
+
+model TutorCategory {
+  tutorProfileId String
+  categoryId     String
+  tutorProfile   TutorProfile @relation(fields: [tutorProfileId], references: [id], onDelete: Cascade)
+  category       Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([tutorProfileId, categoryId])
+  @@map("tutor_categories")
+}
+
+model AvailabilitySlot {
+  id             String       @id @default(uuid())
+  tutorProfileId String
+  tutorProfile   TutorProfile @relation(fields: [tutorProfileId], references: [id], onDelete: Cascade)
+  dayOfWeek      DayOfWeek
+  startTime      String
+  endTime        String
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([tutorProfileId, dayOfWeek, startTime])
+  @@index([tutorProfileId])
+  @@map("availability_slots")
+}
