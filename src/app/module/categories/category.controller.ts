@@ -1,18 +1,79 @@
 import { Request, Response } from "express";
-import { CategoryService } from "./category.service";
 import catchAsync from "../../shared/catchAsync";
 import sendResponse from "../../shared/sendResponse";
+import { CategoryService } from "./category.service";
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
-  const category = await CategoryService.createCategory(req.body);
+  const result = await CategoryService.createCategory(req.body);
+
   sendResponse(res, {
     httpStatusCode: 201,
     success: true,
     message: "Category created successfully",
-    data: category,
+    data: result,
+  });
+});
+
+const getAllCategories = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.getAllCategories(req.query);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    message: "Categories retrieved successfully",
+    data: result,
+  });
+});
+
+const getCategoryById = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.getCategoryById(req.params.id as string);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    message: "Category retrieved successfully",
+    data: result,
+  });
+});
+
+const getCategoryBySlug = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.getCategoryBySlug(req.params.slug as string);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    message: "Category retrieved successfully",
+    data: result,
+  });
+});
+
+const updateCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.updateCategory(req.params.id as string, req.body);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    message: "Category updated successfully",
+    data: result,
+  });
+});
+
+const deleteCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.deleteCategory(req.params.id as string);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    message: "Category deleted successfully",
+    data: result,
   });
 });
 
 export const CategoryController = {
   createCategory,
+  getAllCategories,
+  getCategoryById,
+  getCategoryBySlug,
+  updateCategory,
+  deleteCategory,
 };

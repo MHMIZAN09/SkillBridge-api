@@ -30,4 +30,8 @@ export const auth = betterAuth({
       },
     },
   },
+  trustedOrigins: [process.env.FRONTEND_URL || "http://localhost:5000"],
+  advanced: {
+    disableCSRFCheck: true, // Disable CSRF check for API routes (use with caution)
+  },
 });
