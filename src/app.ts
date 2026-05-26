@@ -1,6 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import { prisma } from "./app/lib/prisma";
 
+import { IndexRoute } from "./app/routes";
+
 const app: Application = express();
 
 // Enable URL-encoded form data parsing
@@ -24,5 +26,7 @@ app.get("/", async (req: Request, res: Response) => {
     data: category,
   });
 });
+
+app.use("/api/v1", IndexRoute);
 
 export default app;
